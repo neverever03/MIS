@@ -28,24 +28,27 @@ CREATE TABLE `检修` (
   PRIMARY KEY (`检修号`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `设备类别` (
-  `设备类别` varchar(45) NOT NULL,
-  `提前期` int(11) NOT NULL,
-  `检修周期` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 CREATE TABLE `检修项目` (
   `设备类别` varchar(45) NOT NULL,
   `项目` varchar(45) NOT NULL,
   PRIMARY KEY (`项目`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `设备类别` (
+  `设备类别` varchar(45) NOT NULL,
+  `提前期` int(11) NOT NULL,
+  `检修周期` int(11) NOT NULL,
+  PRIMARY KEY (`设备类别`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `设备` (
   `设备号` int(11) NOT NULL,
   `设备类别` varchar(45) NOT NULL,
   PRIMARY KEY (`设备号`),
-  KEY `设备类别_idx` (`设备类别`)
+  KEY `设备类别_idx` (`设备类别`),
+  CONSTRAINT `设备类别` FOREIGN KEY (`设备类别`) REFERENCES `设备类别` (`设备类别`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE `检修记录` (
   `记录号` int(11) NOT NULL,
@@ -55,9 +58,10 @@ CREATE TABLE `检修记录` (
   `说明` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`记录号`),
   KEY `检修号_idx` (`检修号`),
-  CONSTRAINT `检修号` FOREIGN KEY (`检修号`) REFERENCES `检修` (`检修号`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `项目_idx` (`项目`),
+  CONSTRAINT `检修号` FOREIGN KEY (`检修号`) REFERENCES `检修` (`检修号`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `项目` FOREIGN KEY (`项目`) REFERENCES `检修项目` (`项目`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-   
  
  模拟数据：
  INSERT INTO `检修`.`材料`
@@ -84,6 +88,7 @@ INSERT INTO `检修`.`设备`
 VALUES
 (1,'CST'),
 (2,'变频器');
+
 INSERT INTO `检修`.`检修`
 (`检修号`,
 `检修日期`,

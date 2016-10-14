@@ -31,8 +31,13 @@ CREATE TABLE `检修` (
 CREATE TABLE `设备类别` (
   `设备类别` varchar(45) NOT NULL,
   `提前期` int(11) NOT NULL,
-  `检修周期` int(11) NOT NULL,
-  `项目` varchar(45) NOT NULL
+  `检修周期` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `检修项目` (
+  `设备类别` varchar(45) NOT NULL,
+  `项目` varchar(45) NOT NULL,
+  PRIMARY KEY (`项目`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `设备` (
@@ -96,7 +101,7 @@ INSERT INTO `检修`.`检修记录`
 VALUES
 (1,1,1,'检查电磁阀的好坏','hh'),
 (2,1,1,'清扫控制箱，紧固接线','hh'),
-(3,2,1,'检查CST控制箱内照明灯','dd');
+(3,2,2,'检查CST控制箱内照明灯','dd');
 
 INSERT INTO `检修`.`材料消耗`
 (`记录号`,
@@ -105,6 +110,13 @@ INSERT INTO `检修`.`材料消耗`
 VALUES
 (1,1,4),(1,2,3),(2,2,1),(3,2,1);
 
+INSERT INTO `检修`.`检修项目`
+(`设备类别`,
+`项目`)
+VALUES
+('CST','检查电磁阀的好坏'),
+('CST','清扫控制箱，紧固接线'),
+('变频器','检查CST控制箱内照明灯');
  3、根据设备编号查询：
 use 检修;
 SELECT 设备号,检修日期,检修人,
@@ -112,7 +124,7 @@ SELECT 设备号,检修日期,检修人,
 FROM 材料消耗 ,检修记录,检修,材料
 where 材料消耗.记录号=检修记录.记录号
  and 检修记录.记录号=检修.检修号  
- and 检修记录.设备号=1;
+ and 检修记录.设备号=2;
 
 
  

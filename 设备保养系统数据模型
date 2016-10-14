@@ -138,4 +138,4 @@ where 材料消耗.记录号=检修记录.记录号
  where datediff(current_date,maxd)<提前期;
  
  5、AXURE原型设计：
- 
+ MIS/Axure1.rp

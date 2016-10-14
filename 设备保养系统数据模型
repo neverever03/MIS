@@ -129,11 +129,13 @@ where 材料消耗.记录号=检修记录.记录号
 
  4、预警：
    use 检修;
- select distinct  设备号 from 
-						(select max(检修日期) as maxd,设备.设备号,提前期 
+ select distinct  设备号,距离时间 from 
+						(select max(检修日期) as maxd,datediff(current_date,max(检修日期)) as 距离时间,设备.设备号,提前期 
 						from 设备,设备类别,检修,检修记录
 						where 设备.设备号=检修记录.设备号 and 检修记录.检修号=检修.检修号
-                        group by 设备.设备号) as t 
+                        group by 设备.设备号) as t
                         
  where datediff(current_date,maxd)<提前期;
+ 
+ 5、AXURE原型设计：
  

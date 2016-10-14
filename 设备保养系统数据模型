@@ -1,79 +1,128 @@
 1、power designer设计E-R图：
-MIS/Cache_-44a3a1b447390be..jpg
 
 
 
 2、SQL语句：
-   保养：
-    CREATE TABLE `equipmentcheck` (
-   `checkid` int(11) NOT NULL AUTO_INCREMENT,
-   `checkperiod` int(11) NOT NULL,
-   `checkdate` date NOT NULL,
-   `checker` varchar(45) NOT NULL,
-   PRIMARY KEY (`checkid`)
- ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8
-   设备:
-   CREATE TABLE `equip` (
-   `eqid` int(11) NOT NULL,
-   `eqkid` varchar(45) NOT NULL,
-   `advancedtime` int(11) NOT NULL,
-   PRIMARY KEY (`eqid`),
-   KEY `equid_idx` (`eqkid`)
- ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-   保养记录：
-  CREATE TABLE `checkrecord` (
-   `recordid` int(11) NOT NULL AUTO_INCREMENT,
-   `checkid` int(11) NOT NULL,
-   `eqid` int(11) NOT NULL,
-   `item` varchar(45) NOT NULL,
-   `description` varchar(45) DEFAULT NULL,
-   PRIMARY KEY (`recordid`),
-   KEY `checkid_idx` (`checkid`),
-   KEY `eqid_idx` (`eqid`),
-   CONSTRAINT `checkid` FOREIGN KEY (`checkid`) REFERENCES `equipmentcheck` (`checkid`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-   CONSTRAINT `eqid` FOREIGN KEY (`eqid`) REFERENCES `equip` (`eqid`) ON DELETE NO ACTION ON UPDATE NO ACTION
- ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8
-   检修项目：
-    CREATE TABLE `content` (
-   `eqkid` varchar(45) NOT NULL,
-   `item` varchar(45) NOT NULL
- ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+CREATE TABLE `材料` (
+  `材料号` int(11) NOT NULL,
+  `材料` varchar(45) NOT NULL,
+  `总量` int(11) NOT NULL,
+  `剩余` int(11) NOT NULL,
+  PRIMARY KEY (`材料号`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `材料消耗` (
+  `记录号` int(11) NOT NULL,
+  `材料号` int(11) NOT NULL,
+  `消耗数量` int(11) NOT NULL,
+  KEY `材料号_idx` (`材料号`),
+  KEY `记录号_idx` (`记录号`),
+  CONSTRAINT `材料号` FOREIGN KEY (`材料号`) REFERENCES `材料` (`材料号`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `记录号` FOREIGN KEY (`记录号`) REFERENCES `检修记录` (`记录号`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `检修` (
+  `检修号` int(11) NOT NULL AUTO_INCREMENT,
+  `检修日期` varchar(45) NOT NULL,
+  `检修人` varchar(45) NOT NULL,
+  PRIMARY KEY (`检修号`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `设备类别` (
+  `设备类别` varchar(45) NOT NULL,
+  `提前期` int(11) NOT NULL,
+  `检修周期` int(11) NOT NULL,
+  `项目` varchar(45) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `设备` (
+  `设备号` int(11) NOT NULL,
+  `设备类别` varchar(45) NOT NULL,
+  PRIMARY KEY (`设备号`),
+  KEY `设备类别_idx` (`设备类别`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `检修记录` (
+  `记录号` int(11) NOT NULL,
+  `检修号` int(11) NOT NULL,
+  `设备号` int(11) NOT NULL,
+  `项目` varchar(45) NOT NULL,
+  `说明` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`记录号`),
+  KEY `检修号_idx` (`检修号`),
+  CONSTRAINT `检修号` FOREIGN KEY (`检修号`) REFERENCES `检修` (`检修号`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
    
-   材料消耗：
-    CREATE TABLE `consumerecord` (
-   `recordid` int(11) NOT NULL,
-   `material` varchar(45) DEFAULT NULL,
-   `num` int(11) DEFAULT NULL,
-   KEY `recordid_idx` (`recordid`),
-   CONSTRAINT `recordid` FOREIGN KEY (`recordid`) REFERENCES `checkrecord` (`recordid`) ON DELETE NO ACTION ON UPDATE NO ACTION
- ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-   材料：
-   CREATE TABLE `materialtable` (
-   `materialid` int(11) NOT NULL AUTO_INCREMENT,
-   `material` varchar(45) NOT NULL,
-   `totalnum` int(11) NOT NULL,
-   `rest` int(11) NOT NULL,
-   PRIMARY KEY (`materialid`)
- ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8
  
  模拟数据：
- 
+ INSERT INTO `检修`.`材料`
+(`材料号`,
+`材料`,
+`总量`,
+`剩余`)
+VALUES
+(1,'线缆',23,3),
+(2,'CST触摸屏',23,3),
+(3,'按钮',56,45);
+
+INSERT INTO `检修`.`设备类别`
+(`设备类别`,
+`提前期`,
+`检修周期`)
+VALUES
+('CST',5,30),
+('变频器',7,60);
+
+INSERT INTO `检修`.`设备`
+(`设备号`,
+`设备类别`)
+VALUES
+(1,'CST'),
+(2,'变频器');
+INSERT INTO `检修`.`检修`
+(`检修号`,
+`检修日期`,
+`检修人`)
+VALUES
+(1,2016-10-02,'de'),
+(2,2016-10-03,'rt');
+
+INSERT INTO `检修`.`检修记录`
+(`记录号`,
+`检修号`,
+`设备号`,
+`项目`,
+`说明`)
+VALUES
+(1,1,1,'检查电磁阀的好坏','hh'),
+(2,1,1,'清扫控制箱，紧固接线','hh'),
+(3,2,1,'检查CST控制箱内照明灯','dd');
+
+INSERT INTO `检修`.`材料消耗`
+(`记录号`,
+`材料号`,
+`消耗数量`)
+VALUES
+(1,1,4),(1,2,3),(2,2,1),(3,2,1);
+
  3、根据设备编号查询：
- 
-use equipment;
-SELECT eqid,checkrecord.checkid,checkperiod,checkdate,checker,checkrecord.recordid,
-item,description,materialid,num 
-FROM consumerecord ,checkrecord,equipmentcheck
-where consumerecord.recordid=checkrecord.recordid
- and checkrecord.checkid=equipmentcheck.checkid  
- and checkrecord.eqid=1;
+use 检修;
+SELECT 设备号,检修日期,检修人,
+项目,说明,材料,消耗数量 
+FROM 材料消耗 ,检修记录,检修,材料
+where 材料消耗.记录号=检修记录.记录号
+ and 检修记录.记录号=检修.检修号  
+ and 检修记录.设备号=1;
+
+
  
  4、预警：
-  use equipment;
- select distinct   eqid from 
-						(select max(checkdate) as maxd,equip.eqid,advancedtime 
-						from equip ,equipmentcheck,checkrecord 
-						where equip.eqid=checkrecord.eqid and checkrecord.checkid=equipmentcheck.checkid 
-                        group by equip.eqid) as t 
- where datediff(current_date,maxd)<advancedtime;
+   use 检修;
+ select distinct  设备号 from 
+						(select max(检修日期) as maxd,设备.设备号,提前期 
+						from 设备,设备类别,检修,检修记录
+						where 设备.设备号=检修记录.设备号 and 检修记录.检修号=检修.检修号
+                        group by 设备.设备号) as t 
+                        
+ where datediff(current_date,maxd)<提前期;
  

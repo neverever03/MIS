@@ -145,7 +145,7 @@ https://github.com/neverever03/MIS/blob/master/%E6%8A%A5%E5%91%8A.PNG
                         
  where datediff(current_date,maxd)<提前期;
  
- #### 截图：
+#### 截图：
  https://github.com/neverever03/MIS/blob/master/%E9%A2%84%E8%AD%A6.PNG
  
 ### 5、AXURE原型设计：

@@ -149,4 +149,4 @@ where 材料消耗.记录号=检修记录.记录号
 ![image] (https://github.com/neverever03/MIS/blob/master/%E9%A2%84%E8%AD%A6.PNG)
  
 ### 5、AXURE原型设计：
-https://github.com/neverever03/MIS/blob/master/Axure1.rp
+http://tqwbf6.axshare.com

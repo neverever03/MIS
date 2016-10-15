@@ -131,8 +131,10 @@ FROM 材料消耗 ,检修记录,检修,材料
 where 材料消耗.记录号=检修记录.记录号
  and 检修记录.记录号=检修.检修号  
  and 检修记录.设备号=2;
+ 
 #### 截图：
 https://github.com/neverever03/MIS/blob/master/%E6%8A%A5%E5%91%8A.PNG
+
 ### 4、预警：
    use 检修;
  select distinct  设备号,距离时间 from 
@@ -142,7 +144,9 @@ https://github.com/neverever03/MIS/blob/master/%E6%8A%A5%E5%91%8A.PNG
                         group by 设备.设备号) as t
                         
  where datediff(current_date,maxd)<提前期;
+ 
  #### 截图：
  https://github.com/neverever03/MIS/blob/master/%E9%A2%84%E8%AD%A6.PNG
+ 
 ### 5、AXURE原型设计：
 https://github.com/neverever03/MIS/blob/master/Axure1.rp

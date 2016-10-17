@@ -1,6 +1,6 @@
 ### 1、power designer设计E-R图：
 
-![image](https://github.com/neverever03/MIS/blob/master/er.PNG)
+![image](https://github.com/neverever03/MIS/blob/master/ER图.PNG)
 
 ### 2、SQL语句：
 CREATE TABLE `材料` (
